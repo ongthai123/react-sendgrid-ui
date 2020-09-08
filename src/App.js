@@ -6,9 +6,9 @@ import EmailEditor from 'react-email-editor'
 //JSON file of a template from unlayer
 import sample from './sample.json'
 
-import { Modal, Button, Header, Form } from 'semantic-ui-react'
+import { Modal, Button, Header, Form, Message } from 'semantic-ui-react'
 
-import {sendEmail} from './api/index'
+import { sendEmail } from './api/index'
 
 class App extends Component {
 	constructor(props) {
@@ -18,10 +18,10 @@ class App extends Component {
 		this.state = {
 			isModalOpen: false,
 			formObject: {
-				from: "ongthai2803@gmail.com",
-				subject: "Enjoy your Summer Break!",
-				to: "ongthai1996@gmail.com",
-				firstName: "jerry",
+				from: "",
+				subject: "",
+				to: "",
+				firstName: "",
 				lastName: "",
 				htmlContent: "",
 			},
@@ -38,7 +38,7 @@ class App extends Component {
 	}
 
 	exportHtml = () => {
-		const {formObject} = this.state;
+		const { formObject } = this.state;
 
 		this.emailEditorRef.current.exportHtml((data) => {
 			const { design, html } = data;
@@ -46,7 +46,7 @@ class App extends Component {
 
 			formObject["htmlContent"] = html;
 
-			this.setState({formObject: formObject})
+			this.setState({ formObject: formObject })
 		});
 	};
 
@@ -71,13 +71,13 @@ class App extends Component {
 		if (!new RegExp(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,15}/g).test(formObject["from"])) {
 			formErrors["from"] = "Please enter a valid email address."
 		}
-		else{
+		else {
 			delete formErrors["from"];
 		}
 		if (!new RegExp(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,15}/g).test(formObject["to"])) {
 			formErrors["to"] = "Please enter a valid email address."
 		}
-		else{
+		else {
 			delete formErrors["to"];
 		}
 
@@ -86,7 +86,7 @@ class App extends Component {
 			formIsValid = false;
 			formErrors["subject"] = "Field cannot be empty."
 		}
-		else{
+		else {
 			delete formErrors["subject"];
 		}
 
@@ -113,12 +113,12 @@ class App extends Component {
 			this.exportHtml();
 
 			sendEmail(formObject)
+
+			this.handleModal();
 		}
 		else {
 
 		}
-
-		console.log(formObject)
 	}
 
 	render() {
